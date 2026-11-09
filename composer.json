@@ -1,0 +1,42 @@
+{
+    "name": "omnistay/local",
+    "type": "library",
+    "description": "Omnistay's local provider, under any PHP host: a site's own listings - homes rented by their hosts - answering the same contracts as a hotel system: search by place or point, availability and offers priced line by line (nights, weekend and seasonal prices, a night's own price, extra guests, weekly and monthly discounts, cleaning, the site's service fee, a tourist tax), the calendar night by night, minimum and maximum stays, notice, check-in days, bookings held without double booking, pending holds that expire, cancellation terms. The site's storage behind one interface; no key, no network.",
+    "keywords": ["vacation-rental", "rental", "listing", "calendar", "availability", "pricing", "booking", "framework-agnostic", "omnistay"],
+    "homepage": "https://github.com/glitchr-omnisense/omnistay-local",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marco Meyer"
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "omnisense/omnistay": "^1.0@dev"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Omnistay\\Local\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Omnistay\\Local\\Tests\\": "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-1.x": "1.x-dev"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
