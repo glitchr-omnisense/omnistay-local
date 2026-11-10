@@ -21,4 +21,10 @@ $registry = new Omnistay\Registry([new Omnistay\Local\LocalFactory($store)], [
 ```
 
 `$store` is the site's `ListingStoreInterface` (omnibase/booking keeps it in Doctrine);
-`InMemoryStore` is one in memory. No key, no network. See [docs/index.md](docs/index.md). License: MIT.
+`InMemoryStore` is one in memory. No key, no network.
+
+Its usage policy, [policy.json](policy.json), says what a site's own data is: no third party's
+terms, no rate limit, every right, nothing to credit (`verifiedAt` empty: there is nothing to
+read). A site may tighten it in its configuration - a limit on bookings a minute,
+`'policy' => ['rateLimits' => [['max' => 10, 'window' => 'minute', 'operations' => ['book']]]]` -
+held by omnistay's registry. See [docs/index.md](docs/index.md). License: MIT.

@@ -2,6 +2,8 @@
 
 namespace Omnistay\Local;
 
+use Omnisense\Contracts\Policy\DeclaresUsagePolicyInterface;
+use Omnisense\Contracts\Policy\UsagePolicy;
 use Omnistay\AvailabilityInterface;
 use Omnistay\BookInterface;
 use Omnistay\CalendarInterface;
@@ -42,9 +44,18 @@ use Omnistay\SearchInterface;
  * guest pays, then confirm() or cancel(). An offer's id is
  * "<listing>|<check-in>|<check-out>|<adults>|<children's ages>|<pets>":
  * offer() prices it again from the calendar as it stands.
+ *
+ * Its usage policy is policy.json, beside this class (POLICY): the site's
+ * own data, no third party's terms - no limit, every right; a site may
+ * tighten it in its configuration.
  */
-final class LocalProvider implements ProviderInterface, SearchInterface, AvailabilityInterface, CalendarInterface, BookInterface, CancelInterface, ContentInterface
+final class LocalProvider implements ProviderInterface, SearchInterface, AvailabilityInterface, CalendarInterface, BookInterface, CancelInterface, ContentInterface, DeclaresUsagePolicyInterface
 {
+    /** The usage policy of a site's own listings. */
+    public const POLICY = __DIR__.'/policy.json';
+
+    private static ?UsagePolicy $policy = null;
+
     /** @var \Closure(): \DateTimeImmutable */
     private readonly \Closure $clock;
 
@@ -70,6 +81,11 @@ final class LocalProvider implements ProviderInterface, SearchInterface, Availab
         return $this->title;
     }
 
+    public function usagePolicy(): UsagePolicy
+    {
+        return self::$policy ??= UsagePolicy::fromFile(self::POLICY);
+    }
+
     public function capabilities(): Capabilities
     {
         return new Capabilities(
@@ -77,6 +93,7 @@ final class LocalProvider implements ProviderInterface, SearchInterface, Availab
             searchBy: ['place', 'cityCode', 'point'],
             kinds: [PropertyKind::Apartment, PropertyKind::House, PropertyKind::Room, PropertyKind::Cabin, PropertyKind::Guesthouse, PropertyKind::Other],
             pricedSearch: true, keyless: true,
+            policy: $this->usagePolicy(),
         );
     }
 

@@ -45,3 +45,12 @@ cancellation)`. A refusal's reason: `past`, `capacity`, `pets`, `advance`, `wind
 
 An offer's id is `<listing>|<check-in>|<check-out>|<adults>|<children's ages, dot-separated>|<pets>`:
 `offer()` prices it again from the calendar as it stands.
+
+## Usage policy
+
+[policy.json](../policy.json) (`LocalProvider::usagePolicy()`): the site's own listings, so no
+third party's terms - `rateLimits` empty (none), commercial use, caching, storage and
+redistribution allowed, no credit, no key; `verifiedAt` empty, as there are no terms to read. The
+provider declares it without building its Capabilities. A site's configuration may tighten it
+(`policy`: a limit on searches or bookings, a right withdrawn), and omnistay's registry holds every
+call through a contract to it.

@@ -1,0 +1,31 @@
+{
+    "$schema": "https://github.com/glitchr-omnisense/contracts/blob/1.x/resources/usage-policy.schema.json",
+    "provider": "local",
+    "rateLimits": [],
+    "rights": {
+        "commercial": "allowed",
+        "openSourceRequired": false,
+        "caching": {"permission": "allowed", "maxTtl": null},
+        "storage": "allowed",
+        "redistribution": "allowed",
+        "attribution": {
+            "required": false,
+            "text": null,
+            "url": null,
+            "where": []
+        },
+        "licence": null
+    },
+    "requirements": {
+        "key": false,
+        "userAgent": {"required": false, "pattern": null}
+    },
+    "provenance": {
+        "terms": null,
+        "policy": null,
+        "verifiedAt": null,
+        "declaredBy": "maintainer",
+        "contact": null,
+        "notes": "No third party's terms: the site's own data. The listings are the site's, kept in its own store, reached with no network: no rate limit, no key, nothing to credit. What the hosts agreed to with the site (their listings shown, their calendars kept) is the site's business; a site may tighten this policy in its configuration (a limit on bookings a minute, for instance)."
+    }
+}
