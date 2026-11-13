@@ -14,6 +14,40 @@ site searches hotels and private rentals through one interface.
   night -, pending while the guest pays (and let go when the payment does not come), confirmed or
   on request; **cancellation terms** (flexible, moderate, strict, non-refundable).
 
+## Install and a first call
+
+```sh
+composer require omnistay/local
+```
+
+No key and no network: the listings are the site's own. Here one home kept in memory
+(`InMemoryStore`; a site keeps them in its database through its own `ListingStoreInterface`),
+priced for three nights, then booked: pending while the guest pays, confirmed once the payment's
+reference is given.
+
+```php
+<?php
+
+require __DIR__.'/vendor/autoload.php';
+
+use Omnistay\Local\{InMemoryStore, Listing, LocalFactory, Pricing};
+use Omnistay\Model\{BookingRequest, Guests, Location, Money, Property, PropertyKind, PropertyRef, Stay, Traveller};
+
+$store = new InMemoryStore([new Listing(
+    new Property(new PropertyRef('homes', 'L-1'), 'Cabane des Tilleuls', PropertyKind::Cabin, new Location(45.91, 6.14, city: 'Annecy')),
+    new Pricing(Money::of(9000, 'EUR'), weekend: Money::of(11000, 'EUR'), cleaning: Money::of(4000, 'EUR')),
+)]);
+$homes = (new LocalFactory($store))->create(['name' => 'homes', 'service_fee' => 12]);
+
+$stay = Stay::of(date('Y-m-d', strtotime('+30 days')), date('Y-m-d', strtotime('+33 days')));
+$offer = $homes->availability(new PropertyRef('homes', 'L-1'), $stay, new Guests(2))->cheapest();
+echo 'total ', $offer->total(), "\n";                     // three nights, cleaning, the 12 % service fee
+$booking = $homes->book(new BookingRequest($offer, [new Traveller('Alice', 'Example', 'alice@example.org')], paymentReference: 'pay_123'));
+echo $booking->status->value, "\n";                      // confirmed
+```
+
+A site wires it in its registry beside hotel providers:
+
 ```php
 $registry = new Omnistay\Registry([new Omnistay\Local\LocalFactory($store)], [
     'homes' => ['factory' => 'local', 'options' => ['service_fee' => 12, 'hold_minutes' => 30]],
